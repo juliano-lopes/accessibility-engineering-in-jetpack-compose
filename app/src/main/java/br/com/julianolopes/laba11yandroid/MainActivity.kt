@@ -3,10 +3,13 @@
 package br.com.julianolopes.laba11yandroid
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,15 +20,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -35,6 +41,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,24 +50,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 
 /**
- * App de avaliação com um único código-base e duas condições:
+ * App de avaliação com dois fluxos:
  * - Fluxo A: baseline com barreiras de acessibilidade
  * - Fluxo B: versão corrigida com engenharia semântica
  *
- * O objetivo é permitir teste com usuários mantendo a mesma estrutura visual e funcional,
- * mudando apenas a implementação de acessibilidade.
+ * O app mantém o mesmo conteúdo visual e a mesma navegação básica.
+ * A diferença está na estrutura semântica e na forma como as ações são expostas.
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,27 +104,126 @@ private data class Product(
     val description: String
 )
 
-private val sampleProducts = listOf(
-    Product(
-        1,
-        "Smartphone X",
-        "R$ 4.999",
-        "Tela de 6,5 polegadas, bateria de longa duração e câmera tripla."
+private data class ProductSection(
+    val title: String,
+    val products: List<Product>
+)
+
+private val productSections = listOf(
+    ProductSection(
+        title = "Seção 1 - Smartphones",
+        products = listOf(
+            Product(
+                1,
+                "Smartphone X",
+                "R$ 4.999",
+                "Tela de 6,5 polegadas, bateria de longa duração e câmera tripla."
+            ),
+            Product(
+                2,
+                "Smartphone Plus",
+                "R$ 5.799",
+                "Modelo premium com melhor autonomia e câmera avançada."
+            ),
+            Product(
+                3,
+                "Smartphone Lite",
+                "R$ 2.399",
+                "Versão compacta para uso diário e navegação básica."
+            )
+        )
     ),
-    Product(2, "Notebook Pro", "R$ 7.299", "Processador rápido, 16 GB de memória e SSD de 512 GB."),
-    Product(3, "Fone Studio", "R$ 799", "Áudio de alta fidelidade com cancelamento de ruído."),
-    Product(
-        4,
-        "Relógio Fit",
-        "R$ 1.299",
-        "Monitoramento de sono, batimentos e atividades físicas."
+    ProductSection(
+        title = "Seção 2 - Notebooks",
+        products = listOf(
+            Product(
+                4,
+                "Notebook Pro",
+                "R$ 7.299",
+                "Processador rápido, 16 GB de memória e SSD de 512 GB."
+            ),
+            Product(
+                5,
+                "Notebook Air",
+                "R$ 6.199",
+                "Leve, portátil e ideal para produtividade e estudos."
+            ),
+            Product(
+                6,
+                "Notebook Max",
+                "R$ 8.999",
+                "Alta performance para edição, desenvolvimento e multitarefa."
+            )
+        )
     ),
-    Product(5, "Tablet Air", "R$ 3.899", "Leve, portátil e indicado para leitura e produtividade."),
-    Product(
-        6,
-        "Caixa Sound",
-        "R$ 1.049",
-        "Som estéreo com resistência à água e conexão Bluetooth. "
+    ProductSection(
+        title = "Seção 3 - Áudio",
+        products = listOf(
+            Product(
+                7,
+                "Fone Studio",
+                "R$ 799",
+                "Áudio de alta fidelidade com cancelamento de ruído."
+            ),
+            Product(
+                8,
+                "Caixa Sound",
+                "R$ 1.049",
+                "Som estéreo com resistência à água e conexão Bluetooth."
+            ),
+            Product(
+                9,
+                "Speaker Mini",
+                "R$ 349",
+                "Caixa portátil para uso em ambientes internos e externos."
+            )
+        )
+    ),
+    ProductSection(
+        title = "Seção 4 - Wearables",
+        products = listOf(
+            Product(
+                10,
+                "Relógio Fit",
+                "R$ 1.299",
+                "Monitoramento de sono, batimentos e atividades físicas."
+            ),
+            Product(
+                11,
+                "Pulse Band",
+                "R$ 499",
+                "Pulseira com monitoramento básico de saúde e notificações."
+            ),
+            Product(
+                12,
+                "Watch Neo",
+                "R$ 1.899",
+                "Relógio inteligente com GPS e suporte a chamadas."
+            )
+        )
+    ),
+    ProductSection(
+        title = "Seção 5 - Tablets e acessórios",
+        products = listOf(
+            Product(
+                13,
+                "Tablet Air",
+                "R$ 3.899",
+                "Leve, portátil e indicado para leitura e produtividade."
+            ),
+            Product(
+                14,
+                "Tablet Pro",
+                "R$ 5.499",
+                "Tela maior, caneta compatível e ótimo para criação de conteúdo."
+            ),
+            Product(
+                15,
+                "Dock Station",
+                "R$ 799",
+                "Acessório para ampliar conexões e organização do setup."
+            )
+        )
     )
 )
 
@@ -156,7 +269,7 @@ private fun HomeScreen(
         )
 
         Text(
-            text = "Escolha um dos fluxos para iniciar a avaliação. O Fluxo A contém as barreiras de acessibilidade; o Fluxo B aplica as correções com engenharia semântica.",
+            text = "Escolha um dos fluxos para iniciar a avaliação.",
             style = MaterialTheme.typography.bodyLarge
         )
 
@@ -166,16 +279,16 @@ private fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(onClick = onOpenFlowA, modifier = Modifier.fillMaxWidth()) {
-                    Text("Fluxo A - com barreiras")
+                    Text("Fluxo A")
                 }
                 Button(onClick = onOpenFlowB, modifier = Modifier.fillMaxWidth()) {
-                    Text("Fluxo B - corrigido")
+                    Text("Fluxo B")
                 }
             }
         }
 
         Text(
-            text = "O app usa o mesmo conteúdo visual nos dois fluxos; apenas as propriedades semânticas e a navegação acessível mudam.",
+            text = "Este app é exclusivo para fins de estudo. Nenhum dado pessoal é coletado.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -187,47 +300,72 @@ private fun ProductFlowScreen(
     improved: Boolean,
     onBack: () -> Unit
 ) {
-    val products = remember { sampleProducts }
-    val favoriteStates = remember { mutableStateMapOf<Int, Boolean>() }
-    val completedStates = remember { mutableStateMapOf<Int, Boolean>() }
+    val context = LocalContext.current
+    //val completedStates = remember { mutableStateMapOf<Int, Boolean>() }
+    val completedStates = remember {
+    mutableStateMapOf<Int, MutableState<Boolean>>()
+}
 
     var showingDetail by remember { mutableStateOf(false) }
-    var selectedProductId by remember { mutableStateOf(products.first().id) }
-
-    val selectedProduct = products.first { it.id == selectedProductId }
+    var selectedProduct by remember { mutableStateOf(productSections.first().products.first()) }
+    var lastFocusedId by remember { mutableStateOf<Int?>(null) }
+    val focusRequesters = remember { mutableStateMapOf<Int, FocusRequester>() }
 
     Column(modifier = Modifier.fillMaxSize()) {
         StudyHeader(
-            title = if (improved) "Fluxo B - corrigido" else "Fluxo A - com barreiras",
+            title = if (improved) "Tela Fluxo B" else "Tela Fluxo A",
             improved = improved,
             onBack = onBack,
-            onNotifications = { /* ação visual apenas */ }
+            onNotifications = {
+                Toast.makeText(
+                    context,
+                    "Acessou as Notificações",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         )
 
         HorizontalDivider()
-
+        LaunchedEffect(showingDetail) {
+            if (improved && !showingDetail && lastFocusedId != null) {
+                focusRequesters[lastFocusedId]?.requestFocus()
+            }
+        }
         if (!showingDetail) {
-            ProductListScreen(
-                products = products,
+            ProductSectionsScreen(
+                sections = productSections,
                 improved = improved,
-                favoriteStates = favoriteStates,
+                focusRequesters = focusRequesters,
                 onOpenProduct = {
-                    selectedProductId = it.id
+                    lastFocusedId = it.id
+                    selectedProduct = it
                     showingDetail = true
                 },
-                onToggleFavorite = { productId ->
-                    favoriteStates[productId] = !(favoriteStates[productId] ?: false)
+                onToggleCompleted = { /* não usado na tela de seção */ },
+                onBuy = { product ->
+                    Toast.makeText(context, "Comprado produto ${product.name}", Toast.LENGTH_SHORT)
+                        .show()
                 },
-                onConfigure = { /* ação visual apenas */ }
+                onConfigure = { product ->
+                    Toast.makeText(
+                        context,
+                        "Configurado produto ${product.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+                onDelete = { product ->
+                    Toast.makeText(context, "Excluído produto ${product.name}", Toast.LENGTH_SHORT)
+                        .show()
+                }
             )
         } else {
+            val completedState = completedStates.getOrPut(selectedProduct.id) {
+    mutableStateOf(false)
+}
             ProductDetailScreen(
                 product = selectedProduct,
                 improved = improved,
-                completed = completedStates[selectedProduct.id] ?: false,
-                onToggleCompleted = { newValue ->
-                    completedStates[selectedProduct.id] = newValue
-                },
+                completedState = completedState,
                 onBackToList = { showingDetail = false }
             )
         }
@@ -247,13 +385,11 @@ private fun StudyHeader(
             .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (true) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = if (improved) "Voltar" else null
-                )
-            }
+        IconButton(onClick = onBack) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = if (improved) "Voltar" else null
+            )
         }
 
         Spacer(modifier = Modifier.width(4.dp))
@@ -265,7 +401,7 @@ private fun StudyHeader(
                 modifier = Modifier.semantics { heading() }
             )
             Text(
-                text = if (improved) "Versão com correções semânticas" else "Versão com barreiras de acessibilidade",
+                text = "Produtos de alta qualidade",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -281,26 +417,74 @@ private fun StudyHeader(
 }
 
 @Composable
-private fun ProductListScreen(
-    products: List<Product>,
+private fun ProductSectionsScreen(
+    sections: List<ProductSection>,
     improved: Boolean,
-    favoriteStates: Map<Int, Boolean>,
+    focusRequesters: MutableMap<Int, FocusRequester>,
     onOpenProduct: (Product) -> Unit,
-    onToggleFavorite: (Int) -> Unit,
-    onConfigure: (Int) -> Unit
+    onToggleCompleted: (Int) -> Unit,
+    onBuy: (Product) -> Unit,
+    onConfigure: (Product) -> Unit,
+    onDelete: (Product) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 24.dp)
+    ) {
+        sections.forEachIndexed { index, section ->
+            SectionBlock(
+                section = section,
+                improved = improved,
+                focusRequesters = focusRequesters,
+
+                onOpenProduct = onOpenProduct,
+                onBuy = onBuy,
+                onConfigure = onConfigure,
+                onDelete = onDelete
+            )
+
+            if (index < sections.lastIndex) {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectionBlock(
+    section: ProductSection,
+    improved: Boolean,
+    focusRequesters: MutableMap<Int, FocusRequester>,
+
+    onOpenProduct: (Product) -> Unit,
+    onBuy: (Product) -> Unit,
+    onConfigure: (Product) -> Unit,
+    onDelete: (Product) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(products, key = { it.id }) { product ->
+        Text(
+            text = section.title,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = if (improved) Modifier.semantics { heading() } else Modifier.semantics {}
+
+        )
+
+        section.products.forEach { product ->
             ProductCard(
                 product = product,
                 improved = improved,
-                favorite = favoriteStates[product.id] ?: false,
+                focusRequesters = focusRequesters,
                 onOpenProduct = { onOpenProduct(product) },
-                onToggleFavorite = { onToggleFavorite(product.id) },
-                onConfigure = { onConfigure(product.id) }
+                onBuy = { onBuy(product) },
+                onConfigure = { onConfigure(product) },
+                onDelete = { onDelete(product) }
             )
         }
     }
@@ -310,132 +494,249 @@ private fun ProductListScreen(
 private fun ProductCard(
     product: Product,
     improved: Boolean,
-    favorite: Boolean,
+    focusRequesters: MutableMap<Int, FocusRequester>,
     onOpenProduct: () -> Unit,
-    onToggleFavorite: () -> Unit,
-    onConfigure: () -> Unit
+    onBuy: () -> Unit,
+    onConfigure: () -> Unit,
+    onDelete: () -> Unit
 ) {
-    val openModifier = if (improved) {
-        Modifier
-            .fillMaxWidth()
-            .clickable { onOpenProduct() }
-            .semantics(mergeDescendants = true) {
-                role = Role.Button
-                customActions = listOf(
-                    CustomAccessibilityAction(if (favorite) "Desfavoritar" else "Favoritar") {
-                        onToggleFavorite()
-                        true
-                    },
-                    CustomAccessibilityAction("Configurar produto") {
-                        onConfigure()
-                        true
-                    }
-                )
-            }
+    val focusRequester = focusRequesters.getOrPut(product.id) {
+        FocusRequester()
+    }
+    val context = LocalContext.current
+    val baseModifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
+
+    val focusModifier = if (improved) {
+        baseModifier
+            .focusRequester(focusRequester)
+            .focusable()
     } else {
-        Modifier
-            .fillMaxWidth()
-            .clickable { onOpenProduct() }
+        baseModifier
     }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            // Barreira 4: agrupamento de informações relacionadas
-            if (improved) {
-                Column(
-                    modifier = Modifier.semantics(mergeDescendants = true) {}
-                ) {
-                    Text(
-                        text = product.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.semantics { heading() }
-                    )
-                    Text(
-                        text = product.price,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            } else {
-                Column {
-                    Text(
-                        text = product.name,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        text = product.price,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Barreira 3: função do elemento/card (role)
-            // Barreira 5: custom actions no Fluxo B
+        if (improved) {
+            // Fluxo B: tudo agrupado semanticamente; ações ficam apenas em custom actions.
             Row(
-                modifier = openModifier,
+                focusModifier
+                    .clickable(onClickLabel = "Detalhes do produto") {
+
+                        onOpenProduct()
+
+                    }
+
+                    .padding(16.dp)
+                    .semantics(mergeDescendants = true) {
+
+                        customActions = listOf(
+                            CustomAccessibilityAction("Comprar produto") {
+                                onBuy()
+                                true
+                            },
+                            CustomAccessibilityAction("Ver detalhes") {
+                                onOpenProduct()
+                                true
+                            },
+                            CustomAccessibilityAction("Configurar produto") {
+                                onConfigure()
+                                true
+                            },
+                            CustomAccessibilityAction("Excluir produto") {
+                                onDelete()
+                                true
+                            }
+                        )
+                        role = Role.Button
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Abrir detalhes",
-                    modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.primary
+                    text = product.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = product.price,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                // Barreira 1: rótulos de elementos (ícone sem contentDescription no A)
-                IconButton(
-                    onClick = onToggleFavorite,
-                    modifier = if (improved) Modifier.clearAndSetSemantics { } else Modifier
-                ) {
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = null,
+                    modifier = Modifier.pointerInput(product.id) {
+                        detectTapGestures {
+                            onBuy()
+                        }
+                    }
+                )
+
+
+                /*
+                                Icon(
+                                    imageVector = Icons.Default.Favorite,
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = null
+                                )
+                                    */
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                IconButton(modifier = Modifier.clearAndSetSemantics { }, onClick = onOpenProduct) {
                     Icon(
-                        imageVector = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (improved) null else null,
-                        tint = if (favorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
                     )
                 }
 
-                IconButton(
-                    onClick = onConfigure,
-                    modifier = if (improved) Modifier.clearAndSetSemantics { } else Modifier
-                ) {
+
+                IconButton(modifier = Modifier.clearAndSetSemantics { }, onClick = onConfigure) {
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = if (improved) null else "Configurar produto"
+                        contentDescription = null
+                    )
+                }
+
+                IconButton(modifier = Modifier.clearAndSetSemantics { }, onClick = onDelete) {
+
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null
                     )
                 }
             }
+
+        } else {
+            // Fluxo A: apenas o agrupamento nome + ícone Comprar fica junto;
+            // o restante permanece solto, com ações separadas.
+            Row(
+                focusModifier
+                    .semantics(mergeDescendants = true) {},
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = product.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = product.price,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = "Comprar",
+                    modifier = Modifier.pointerInput(product.id) {
+                        detectTapGestures {
+                            onBuy()
+                        }
+                    }
+                )
+
+
+            }
+
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onOpenProduct) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null
+                    )
+                }
+
+
+                IconButton(onClick = onConfigure) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Configurar"
+                    )
+                }
+
+                IconButton(onClick = onDelete) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null
+                    )
+                }
+            }
+
         }
     }
-
-    Spacer(modifier = Modifier.height(4.dp))
 }
 
 @Composable
 private fun ProductDetailScreen(
     product: Product,
     improved: Boolean,
-    completed: Boolean,
-    onToggleCompleted: (Boolean) -> Unit,
+    //completed: Boolean,
+    completedState: MutableState<Boolean>,
     onBackToList: () -> Unit
 ) {
+
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(improved) {
+        if (improved) {
+            focusRequester.requestFocus()
+        }
+    }
+        var completed by remember { mutableStateOf(false) }
+        completed = completedState.value
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+
         if (improved) {
-            Column(modifier = Modifier.semantics(mergeDescendants = true) {}) {
+            Column(modifier = Modifier.semantics() {}) {
                 Text(
-                    text = product.name,
+                    text = "Detalhes  do produto: " + product.name,
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.semantics { heading() }
+                    modifier = Modifier
+                        .semantics { heading() }
+                        .focusRequester(focusRequester)
+                        .focusable()
                 )
                 Text(
                     text = product.description,
@@ -463,55 +764,59 @@ private fun ProductDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .toggleable(
-                            value = completed,
-                            onValueChange = onToggleCompleted,
-                            role = Role.Button
+                            value = completedState.value,
+                            onValueChange = {
+                                 completedState.value = it
+                                 completed = !completed
+                                 },
+                            role = Button
                         )
                         .semantics {
-                            stateDescription = if (completed) {
-                                "Item concluído"
+                            stateDescription = if (completedState.value) {
+                                "Produto favoritado. Desmarcar como favorito."
+
                             } else {
-                                "Item não concluído"
+                                "Produto não favoritado. Marcar como favorito."
                             }
                         }
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (completed) "Desmarcar como concluído" else "Marcar como concluído",
+                        text = if(completed) "Desfavoritar" else "Favoritar",
                         modifier = Modifier.weight(1f)
+                        .clearAndSetSemantics {}
+
                     )
                     Icon(
-                        imageVector = if (completed) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        imageVector = if (completedState.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = null,
-                        tint = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = if (completedState.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             } else {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onToggleCompleted(!completed) }
+                        .clickable { completedState.value = !completedState.value }
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (completed) "Desmarcar como concluído" else "Marcar como concluído",
+                        text = if (completedState.value) "Desfavoritar produto" else "Favoritar produto",
                         modifier = Modifier.weight(1f)
                     )
                     Icon(
-                        imageVector = if (completed) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        imageVector = if (completedState.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = null,
-                        tint = if (completed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = if (completedState.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Button(onClick = onBackToList) {
-                Text("Voltar para a lista")
-            }
+        Button(onClick = onBackToList) {
+            Text(text = if (improved) "Voltar para a lista de produtos" else "Voltar")
         }
 
         Box(
