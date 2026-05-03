@@ -1,61 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <hierarchy rotation="0">
     <node index="0" text="" resource-id="" class="android.widget.FrameLayout"
-        package="br.com.julianolopes.laba11yandroid" content-desc="" checkable="false"
+        package="br.com.accessibleandroid.laba11yandroid" content-desc="" checkable="false"
         checked="false" clickable="false" enabled="true" focusable="false" focused="false"
         scrollable="false" long-clickable="false" password="false" selected="false"
         bounds="[0,0][904,2316]" drawing-order="0" hint="">
         <node index="0" text="" resource-id="" class="android.widget.LinearLayout"
-            package="br.com.julianolopes.laba11yandroid" content-desc="" checkable="false"
+            package="br.com.accessibleandroid.laba11yandroid" content-desc="" checkable="false"
             checked="false" clickable="false" enabled="true" focusable="false" focused="false"
             scrollable="false" long-clickable="false" password="false" selected="false"
             bounds="[0,0][904,2316]" drawing-order="1" hint="">
             <node index="0" text="" resource-id="android:id/content"
-                class="android.widget.FrameLayout" package="br.com.julianolopes.laba11yandroid"
+                class="android.widget.FrameLayout" package="br.com.accessibleandroid.laba11yandroid"
                 content-desc="" checkable="false" checked="false" clickable="false" enabled="true"
                 focusable="false" focused="false" scrollable="false" long-clickable="false"
                 password="false" selected="false" bounds="[0,0][904,2316]" drawing-order="2" hint="">
                 <node index="0" text="" resource-id=""
                     class="androidx.compose.ui.platform.ComposeView"
-                    package="br.com.julianolopes.laba11yandroid" content-desc="" checkable="false"
+                    package="br.com.accessibleandroid.laba11yandroid" content-desc="" checkable="false"
                     checked="false" clickable="false" enabled="true" focusable="false"
                     focused="false" scrollable="false" long-clickable="false" password="false"
                     selected="false" bounds="[0,0][904,2316]" drawing-order="1" hint="">
                     <node index="0" text="" resource-id="" class="android.view.View"
-                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                         checkable="false" checked="false" clickable="false" enabled="true"
                         focusable="false" focused="false" scrollable="false" long-clickable="false"
                         password="false" selected="false" bounds="[0,0][904,2316]" drawing-order="0"
                         hint="">
                         <node index="0" text="" resource-id="" class="android.view.View"
-                            package="br.com.julianolopes.laba11yandroid" content-desc=""
+                            package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                             checkable="false" checked="false" clickable="false" enabled="true"
                             focusable="false" focused="false" scrollable="false"
                             long-clickable="false" password="false" selected="false"
                             bounds="[0,0][904,2316]" drawing-order="0" hint="">
                             <node index="0" text="" resource-id="" class="android.widget.ScrollView"
-                                package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                 checkable="false" checked="false" clickable="false" enabled="true"
                                 focusable="false" focused="false" scrollable="true"
                                 long-clickable="false" password="false" selected="false"
                                 bounds="[0,0][904,2316]" drawing-order="0" hint="">
                                 <node index="0" text="O DEPOIS com papel (Sucesso):" resource-id=""
                                     class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
                                     selected="false" bounds="[42,0][678,38]" drawing-order="0"
                                     hint="" />
                                 <node index="1" text="" resource-id="" class="android.view.View"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="true" checked="false" clickable="true" enabled="true"
                                     focusable="true" focused="false" scrollable="false"
                                     long-clickable="false" password="false" selected="false"
                                     bounds="[42,49][862,175]" drawing-order="0" hint="">
                                     <node index="0" text="Favoritar" resource-id=""
                                         class="android.widget.TextView"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="false"
                                         enabled="true" focusable="false" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -63,7 +63,7 @@
                                         hint="" />
                                     <node index="1" text="" resource-id=""
                                         class="android.widget.Button"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="false"
                                         enabled="true" focusable="false" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -73,7 +73,7 @@
                                 <node index="2"
                                     text="Barreira 4: Falta de Agrupamento de Elementos Relacionados"
                                     resource-id="" class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -81,7 +81,7 @@
                                     hint="" />
                                 <node index="3" text="O antes sem agrupamento (Falha):"
                                     resource-id="" class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -89,7 +89,7 @@
                                     hint="" />
                                 <node index="4" text="Preço do produto A:" resource-id=""
                                     class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -97,7 +97,7 @@
                                     hint="" />
                                 <node index="5" text="R$55,00" resource-id=""
                                     class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -105,14 +105,14 @@
                                     hint="" />
                                 <node index="6" text="O depois agrupado (Sucesso):" resource-id=""
                                     class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
                                     selected="false" bounds="[42,808][642,871]" drawing-order="0"
                                     hint="" />
                                 <node index="7" text="" resource-id="" class="android.view.View"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -120,7 +120,7 @@
                                     hint="">
                                     <node index="0" text="Preço do produto B" resource-id=""
                                         class="android.widget.TextView"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="false"
                                         enabled="true" focusable="false" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -128,7 +128,7 @@
                                         drawing-order="0" hint="" />
                                     <node index="1" text="R$65,00" resource-id=""
                                         class="android.widget.TextView"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="false"
                                         enabled="true" focusable="false" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -138,7 +138,7 @@
                                 <node index="8"
                                     text="Barreira 5: gestos específicos e Agrupamento que Impede Interação"
                                     resource-id="" class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -146,14 +146,14 @@
                                     hint="" />
                                 <node index="9" text="O antes fragmentado (Falha):" resource-id=""
                                     class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
                                     selected="false" bounds="[42,1462][624,1525]" drawing-order="0"
                                     hint="" />
                                 <node index="10" text="" resource-id="" class="android.view.View"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
@@ -161,14 +161,14 @@
                                     hint="">
                                     <node index="0" text="Produto A" resource-id=""
                                         class="android.widget.TextView"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="false"
                                         enabled="true" focusable="false" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
                                         selected="false" bounds="[84,1599][568,1662]"
                                         drawing-order="0" hint="" />
                                     <node index="1" text="" resource-id="" class="android.view.View"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="true"
                                         enabled="true" focusable="true" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -176,7 +176,7 @@
                                         drawing-order="0" hint="">
                                         <node index="0" text="" resource-id=""
                                             class="android.view.View"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="Favoritar" checkable="false"
                                             checked="false" clickable="false" enabled="true"
                                             focusable="false" focused="false" scrollable="false"
@@ -184,7 +184,7 @@
                                             bounds="[600,1599][663,1662]" drawing-order="0" hint="" />
                                         <node index="1" text="" resource-id=""
                                             class="android.widget.Button"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="" checkable="false" checked="false"
                                             clickable="false" enabled="true" focusable="false"
                                             focused="false" scrollable="false"
@@ -192,7 +192,7 @@
                                             bounds="[579,1578][684,1683]" drawing-order="0" hint="" />
                                     </node>
                                     <node index="2" text="" resource-id="" class="android.view.View"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="true"
                                         enabled="true" focusable="true" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -200,7 +200,7 @@
                                         drawing-order="0" hint="">
                                         <node index="0" text="" resource-id=""
                                             class="android.view.View"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="Configurar produto" checkable="false"
                                             checked="false" clickable="false" enabled="true"
                                             focusable="false" focused="false" scrollable="false"
@@ -208,7 +208,7 @@
                                             bounds="[726,1599][789,1662]" drawing-order="0" hint="" />
                                         <node index="1" text="" resource-id=""
                                             class="android.widget.Button"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="" checkable="false" checked="false"
                                             clickable="false" enabled="true" focusable="false"
                                             focused="false" scrollable="false"
@@ -218,21 +218,21 @@
                                 </node>
                                 <node index="11" text="O depois com ações personalizadas (Sucesso):"
                                     resource-id="" class="android.widget.TextView"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
                                     selected="false" bounds="[42,1788][862,1914]" drawing-order="0"
                                     hint="" />
                                 <node index="12" text="" resource-id="" class="android.view.View"
-                                    package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                    package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                     checkable="false" checked="false" clickable="false"
                                     enabled="true" focusable="false" focused="false"
                                     scrollable="false" long-clickable="false" password="false"
                                     selected="false" bounds="[42,1914][862,2124]" drawing-order="0"
                                     hint="">
                                     <node index="0" text="" resource-id="" class="android.view.View"
-                                        package="br.com.julianolopes.laba11yandroid" content-desc=""
+                                        package="br.com.accessibleandroid.laba11yandroid" content-desc=""
                                         checkable="false" checked="false" clickable="false"
                                         enabled="true" focusable="false" focused="false"
                                         scrollable="false" long-clickable="false" password="false"
@@ -240,7 +240,7 @@
                                         drawing-order="0" hint="">
                                         <node index="0" text="Produto B (Acessível)" resource-id=""
                                             class="android.widget.TextView"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="" checkable="false" checked="false"
                                             clickable="false" enabled="true" focusable="false"
                                             focused="false" scrollable="false"
@@ -248,7 +248,7 @@
                                             bounds="[84,1988][568,2051]" drawing-order="0" hint="" />
                                         <node index="1" text="" resource-id=""
                                             class="android.view.View"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="" checkable="false" checked="false"
                                             clickable="false" enabled="true" focusable="false"
                                             focused="false" scrollable="false"
@@ -256,7 +256,7 @@
                                             bounds="[568,1956][694,2082]" drawing-order="0" hint="" />
                                         <node index="2" text="" resource-id=""
                                             class="android.view.View"
-                                            package="br.com.julianolopes.laba11yandroid"
+                                            package="br.com.accessibleandroid.laba11yandroid"
                                             content-desc="" checkable="false" checked="false"
                                             clickable="false" enabled="true" focusable="false"
                                             focused="false" scrollable="false"
@@ -271,7 +271,7 @@
             </node>
         </node>
         <node index="1" text="" resource-id="android:id/navigationBarBackground"
-            class="android.view.View" package="br.com.julianolopes.laba11yandroid" content-desc=""
+            class="android.view.View" package="br.com.accessibleandroid.laba11yandroid" content-desc=""
             checkable="false" checked="false" clickable="false" enabled="true" focusable="false"
             focused="false" scrollable="false" long-clickable="false" password="false"
             selected="false" bounds="[0,2190][904,2316]" drawing-order="2" hint="" />

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "br.com.julianolopes.laba11yandroid"
+    namespace = "br.com.accessibleandroid.laba11yandroid"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "br.com.julianolopes.laba11yandroid"
+        applicationId = "br.com.accessibleandroid.laba11yandroid"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

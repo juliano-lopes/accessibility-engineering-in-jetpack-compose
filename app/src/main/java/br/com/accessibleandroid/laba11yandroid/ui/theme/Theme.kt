@@ -1,4 +1,4 @@
-package br.com.julianolopes.laba11yandroid.ui.theme
+package br.com.accessibleandroid.laba11yandroid.ui.theme
 
 import android.app.Activity
 import android.os.Build
