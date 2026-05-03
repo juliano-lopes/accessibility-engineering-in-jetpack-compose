@@ -68,30 +68,27 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Adicionamos scroll para que os experimentos não sumam da tela
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        Spacer(modifier = Modifier.height(40.dp)) // Dá espaço para a barra do sistema
-                        ExperimentoBarreira1()
+                        Spacer(modifier = Modifier.height(40.dp))
+                        BarrierLabel()
 
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                        ExperimentoBarreiraEstado()
+                        BarrierState()
 
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
 
-                        ExperimentoBarreiraPapel()
+                        BarrierRole()
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        ExperimentoAgrupamento()
+                        BarrierRelatedContent()
                         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-                        ExperimentoAcoesPersonalizadas()
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        //ExperimentoLiveRegion()
+                        BarrierGestures()
                         Spacer(modifier = Modifier.height(40.dp))
                     }
                 }
@@ -101,49 +98,45 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ExperimentoBarreira1() {
+fun BarrierLabel() {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = "Barreira 1: Rótulos de elementos",
+            text = "Barrier 1: Element Labels",
             style = MaterialTheme.typography.headlineSmall,
-            //modifier = Modifier.semantics { heading() }
         )
-        Text("O rótulo antes (Falha):", modifier = Modifier.padding(top = 8.dp))
+        Text("The label before (Failure):", modifier = Modifier.padding(top = 8.dp))
         IconButton(onClick = { }) {
             Icon(Icons.Default.Notifications, contentDescription = null)
         }
 
-        Text("O rótulo depois (Sucesso):", modifier = Modifier.padding(top = 8.dp))
+        Text("The label after (Success):", modifier = Modifier.padding(top = 8.dp))
         IconButton(onClick = { }) {
-            Icon(Icons.Default.Notifications, contentDescription = "Notificações")
+            Icon(Icons.Default.Notifications, contentDescription = "Notifications")
         }
     }
 }
 
 @Composable
-fun ExperimentoAgrupamento() {
+fun BarrierRelatedContent() {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = "Barreira 4: Falta de Agrupamento de Elementos Relacionados",
+            text = "Barrier 4: Lack of Grouping of Related Elements",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.semantics { heading() }
         )
-        // Fragmentada
-        Text("O antes sem agrupamento (Falha):")
+        Text("The before without grouping (Failure):")
         Column(modifier = Modifier.padding(top = 8.dp)) {
-            Text("Preço do produto A:")
+            Text("Price of product A:")
             Text("R$55,00")
         }
-        // Agrupada
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text("O depois agrupado (Sucesso):")
+        Text("The after grouped (Success):")
         Column(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .semantics(mergeDescendants = true) {}
         ) {
-            Text("Preço do produto B")
+            Text("Price of product B")
             Text("R$65,00")
         }
     }
@@ -151,11 +144,10 @@ fun ExperimentoAgrupamento() {
 
 
 @Composable
-fun ExperimentoBarreiraPapel() {
+fun BarrierRole() {
     val estaAtivoBarreira by remember { mutableStateOf(false) }
     var estaAtivo by remember { mutableStateOf(false) }
 
-    // Definindo as cores para garantir que o visual seja idêntico nos dois
     val corIconeBarreira =
         if (estaAtivoBarreira) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
     val iconeStatusBarreira =
@@ -167,14 +159,12 @@ fun ExperimentoBarreiraPapel() {
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = "Barreira 3: Elementos sem Função Especificada",
+            text = "Barrier 3: Elements without Specified role",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.semantics { heading() }
+            modifier = Modifier.semantics { heading() } // the element role is defined as heading
         )
 
-        // --- CENÁRIO 1: O ANTES (Falha sem função) ---
-
-        Text("O antes sem papel (Falha):")
+        Text("The Before with no role (Failure):")
 
         Row(
             modifier = Modifier
@@ -185,14 +175,14 @@ fun ExperimentoBarreiraPapel() {
                     onValueChange = { estaAtivo = it }
                 )
                 .semantics {
-                    stateDescription = if (estaAtivo) "Item favoritado" else "Item não favoritado"
+                    stateDescription = if (estaAtivo) "Favorite item" else "Unfavorite item"
                 }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = if (estaAtivo) "Desfavoritar" else "Favoritar"
+                text = if (estaAtivo) "Unfavorite" else "Favorite"
             )
             Spacer(Modifier.weight(1f))
             Icon(
@@ -205,9 +195,7 @@ fun ExperimentoBarreiraPapel() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- CENÁRIO 2: O DEPOIS (SUCESSO com função) ---
-        // Visualmente IGUAL ao anterior, mas com a engenharia correta.
-        Text("O DEPOIS com papel (Sucesso):")
+        Text("THE AFTER with a role (Success):")
 
         Row(
             modifier = Modifier
@@ -216,17 +204,17 @@ fun ExperimentoBarreiraPapel() {
                 .toggleable(
                     value = estaAtivo,
                     onValueChange = { estaAtivo = it },
-                    role = Role.Button // a função do elemento é definida como botão
+                    role = Role.Button // the element role is defined as button
                 )
                 .semantics {
-                    stateDescription = if (estaAtivo) "Item favoritado" else "Item não favoritado"
+                    stateDescription = if (estaAtivo) "Favorite item" else "Unfavorite item"
                 }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = if (estaAtivo) "Desfavoritar" else "Favoritar"
+                text = if (estaAtivo) "Unfavorite" else "Favorite"
             )
             Spacer(Modifier.weight(1f))
             Icon(imageVector = iconeStatus, contentDescription = null, tint = corIcone)
@@ -236,11 +224,10 @@ fun ExperimentoBarreiraPapel() {
 }
 
 @Composable
-fun ExperimentoBarreiraEstado() {
+fun BarrierState() {
     var estaAtivoBarreira by remember { mutableStateOf(false) }
     var estaAtivo by remember { mutableStateOf(false) }
 
-    // Definindo as cores para garantir que o visual seja idêntico nos dois
     val corIconeBarreira =
         if (estaAtivoBarreira) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
     val iconeStatusBarreira =
@@ -252,58 +239,52 @@ fun ExperimentoBarreiraEstado() {
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = "Barreira 2: Omissão e Descrição de Estado (State)",
+            text = "Barrier 2: Lack of State and its Description",
             style = MaterialTheme.typography.headlineSmall,
-            //modifier = Modifier.semantics { heading() }
         )
-
-        // --- CENÁRIO 1: O ANTES (ERRO) ---
-        // Visualmente perfeito (troca cor e ícone), mas semânticamente mudo.
-        Text("O estado antes (Falha):", modifier = Modifier.padding(top = 16.dp))
+        Text("The state before (Failed):", modifier = Modifier.padding(top = 16.dp))
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
                     estaAtivoBarreira = !estaAtivoBarreira
-                } // Erro: clickable não gerencia estado nativo
+                } //  clickable doesn't manage native state
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Favoritar item")
+            Text("Favorite item")
             Spacer(Modifier.weight(1f))
             Icon(
                 imageVector = iconeStatusBarreira,
-                contentDescription = null, // Erro: ícone não descreve a mudança
+                contentDescription = null, // icon does not describe the change
                 tint = corIconeBarreira
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- CENÁRIO 2: O DEPOIS (SUCESSO) ---
-        // Visualmente IGUAL ao anterior, mas com a engenharia correta.
-        Text("O DEPOIS (Sucesso):")
+        Text("THE AFTER (Success):")
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
                 .toggleable(
-                    // Sucesso: toggleable mapeia o estado 'checked' no XML
+                    // toggleable maps the 'checked' state in XML
                     value = estaAtivo,
                     onValueChange = { estaAtivo = it },
                 )
                 .semantics {
-                    // Sucesso: stateDescription informa o TalkBack e popula o nó de acessibilidade
-                    stateDescription = if (estaAtivo) "Item favoritado" else "Item não favoritado"
+                    // stateDescription informs TalkBack and populates the accessibility node
+                    stateDescription = if (estaAtivo) "Favorite item" else "Unfavorite item"
                 }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = if (estaAtivo) "Desfavoritar" else "Favoritar"
+                text = if (estaAtivo) "Unfavorite" else "Favorite"
             )
             Spacer(Modifier.weight(1f))
             Icon(imageVector = iconeStatus, contentDescription = null, tint = corIcone)
@@ -312,46 +293,40 @@ fun ExperimentoBarreiraEstado() {
 }
 
 @Composable
-fun ExperimentoAcoesPersonalizadas() {
+fun BarrierGestures() {
     var favoritado by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = "Barreira 5: gestos específicos e Agrupamento que Impede Interação",
+            text = "Barrier 5: Specific gestures and Grouping that Prevents Interaction",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.semantics { heading() }
         )
-
-        // --- CENÁRIO 1: O ANTES (DIFICULDADE DE NAVEGAÇÃO) ---
-        // Aqui, o TalkBack vai focar em CADA elemento. Imagine uma lista com 20 cards desses.
-        // O usuário cego teria que dar 3 toques para passar por um único item.
-        Text("O antes fragmentado (Falha):", modifier = Modifier.padding(top = 16.dp))
+        Text("The before, fragmented (Failure):", modifier = Modifier.padding(top = 16.dp))
         Card(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Produto A", modifier = Modifier.weight(1f))
+                Text("Product A", modifier = Modifier.weight(1f))
 
-                // Botões soltos: geram excesso de paradas de foco
+                // separated buttons: generate excessive focus stops
                 IconButton(onClick = { favoritado = !favoritado }) {
                     Icon(
                         if (favoritado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (favoritado) "Desfavoritar" else "Favoritar"
+                        contentDescription = if (favoritado) "Unfavorite" else "Favorite"
                     )
 
                 }
                 IconButton(onClick = { /* Configurar */ }) {
-                    Icon(Icons.Default.Settings, contentDescription = "Configurar produto")
+                    Icon(Icons.Default.Settings, contentDescription = "Configure product")
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // BARREIRA 5: Agrupamento que impede a interação individual
         Text(
-            "Agrupamento que impede a interação individual (Falha):",
+            "Grouping that prevents individual interaction (Failure):",
             color = Color(0xFF2E7D32)
         )
 
@@ -359,11 +334,9 @@ fun ExperimentoAcoesPersonalizadas() {
         var offsetX by remember { mutableStateOf(0f) }
         var eFavorito by remember { mutableStateOf(false) }
 
-// Box para o fundo da lixeira
         Box(modifier = Modifier
             .fillMaxWidth()
             .background(Color.Red)) {
-            // Ícone de lixeira que fica atrás (opcional para o visual)
             Icon(
                 Icons.Default.Delete,
                 contentDescription = null,
@@ -373,18 +346,17 @@ fun ExperimentoAcoesPersonalizadas() {
                     .padding(16.dp)
             )
 
-            // O CARD QUE DESLIZA
             Row(
                 modifier = Modifier
-                    .offset { IntOffset(offsetX.roundToInt(), 0) } // AQUI ESTAVA O ERRO
+                    .offset { IntOffset(offsetX.roundToInt(), 0) }
                     .fillMaxWidth()
                     .background(Color.White)
-                    // GESTO DE ARRASTAR (Barreira de Acessibilidade 1)
+                    // DRAG GESTURE (Accessibility Barrier 1)
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
                                 if (offsetX < -300f) {
-                                    Toast.makeText(contexto, "Item Apagado", Toast.LENGTH_SHORT)
+                                    Toast.makeText(contexto, "Deleted Item", Toast.LENGTH_SHORT)
                                         .show()
                                 }
                                 offsetX = 0f
@@ -396,7 +368,7 @@ fun ExperimentoAcoesPersonalizadas() {
                         )
                     }
                     .clickable {
-                                Toast.makeText(contexto, "Detalhes do produto", Toast.LENGTH_SHORT)
+                                Toast.makeText(contexto, "Product Details", Toast.LENGTH_SHORT)
                                     .show()
 
                     }
@@ -404,17 +376,16 @@ fun ExperimentoAcoesPersonalizadas() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("Smartphone X", modifier = Modifier.weight(1f))
-                // ÍCONE FAVORITAR
                 Icon(
                     imageVector = if (eFavorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Favoritar",
+                    contentDescription = "Favorite",
                     tint = if (eFavorito) Color.Red else Color.Gray,
                     modifier = Modifier
                         .size(40.dp)
                         .pointerInput(Unit) {
                             detectTapGestures {
                                 eFavorito = !eFavorito
-                                Toast.makeText(contexto, "Favorito alterado", Toast.LENGTH_SHORT)
+                                Toast.makeText(contexto, "Favorite changed", Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }
@@ -422,15 +393,14 @@ fun ExperimentoAcoesPersonalizadas() {
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // ÍCONE CONFIGURAR
                 Icon(
                     imageVector = Icons.Default.Settings,
-                    contentDescription = "Configurar",
+                    contentDescription = "Configure",
                     modifier = Modifier
                         .size(40.dp)
                         .pointerInput(Unit) {
                             detectTapGestures {
-                                Toast.makeText(contexto, "Configurações", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(contexto, "Settings", Toast.LENGTH_SHORT).show()
                             }
                         }
                 )
@@ -438,11 +408,9 @@ fun ExperimentoAcoesPersonalizadas() {
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-        // --- CENÁRIO 2: O DEPOIS (SUCESSO ACADÊMICO) ---
-        // Para quem enxerga: Visualmente IGUAL. Os botões estão lá e funcionam.
-        // Para o TalkBack: O Card é UM só. As ações dos botões foram movidas para o "Menu de Ações".
+
         Text(
-            "O depois com ações personalizadas (Sucesso):",
+            "The after with personalized actions (Success):",
             color = Color(0xFF2E7D32)
         )
         Card(
@@ -453,29 +421,28 @@ fun ExperimentoAcoesPersonalizadas() {
                 modifier = Modifier
                     .padding(16.dp)
                     .semantics(mergeDescendants = true) {
-                        // 1. Unifica o foco na linha  do card (Navegação rápida)
 
-                        // 2. Mapeia as funções dos botões para o menu de contexto
+                        // This maps the button functions to the custom actions
                         customActions = listOf(
-                            CustomAccessibilityAction(if (favoritado) "Desfavoritar" else "Favoritar") {
+                            CustomAccessibilityAction(if (favoritado) "Unfavorite" else "Favorite") {
                                 favoritado = !favoritado
                                 true
                             },
-                            CustomAccessibilityAction("Configurar produto") { true }
+                            CustomAccessibilityAction("Configure produto") { true }
                         )
                     },
 
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Produto B (Acessível)", modifier = Modifier.weight(1f))
+                Text("Product B (accessible)", modifier = Modifier.weight(1f))
 
-                // Os botões continuam aqui para o usuário que não utiliza tecnologia assistiva
+                // The buttons are still here for users who do not use assistive technology
                 IconButton(
                     onClick = { favoritado = !favoritado },
-                    // limpa a semântica do botão porque a funcionalidade está como ação personalizada no menu de contexto, assim o Talkback não precisa focar nesse botão individualmente.
+                    // cleans the semantics of the button because the functionality is as a custom action in the context menu, so Talkback does not need to focus on that button individually.
                     modifier = Modifier.clearAndSetSemantics { }
                 ) {
-                    // o ícone também não precisa de contentDescription:
+                    // the icon also doesn't need contentDescription:
                     Icon(
                         if (favoritado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         null
@@ -483,10 +450,8 @@ fun ExperimentoAcoesPersonalizadas() {
                 }
                 IconButton(
                     onClick = { /* Configurar */ },
-                    // limpa a semântica do botão porque a funcionalidade está como ação personalizada no menu de contexto, assim o Talkback não precisa focar nesse botão individualmente.
                     modifier = Modifier.clearAndSetSemantics { }
                 ) {
-                    // o ícone também não precisa de contentDescription:
                     Icon(Icons.Default.Settings, null)
                 }
             }
