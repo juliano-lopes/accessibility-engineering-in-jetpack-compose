@@ -7,7 +7,7 @@ This repository contains the artifacts used in the paper:
 
 This repository is organized into two branches:
 
-### 🔹 main (Prototype)
+### 🔹 This branch - main (Prototype)
 [The main branch](https://anonymous.4open.science/r/accessibility-engineering-in-jetpack-compose/) contains the controlled prototype used for:
 - technical inspection
 - barrier identification
