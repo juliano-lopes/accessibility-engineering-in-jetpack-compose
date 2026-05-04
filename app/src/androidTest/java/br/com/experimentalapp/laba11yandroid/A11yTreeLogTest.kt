@@ -1,4 +1,4 @@
-package br.com.julianolopes.laba11yandroid
+package br.com.experimentalapp.laba11yandroid
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onRoot

@@ -1,6 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
-package br.com.julianolopes.laba11yandroid
+package br.com.experimentalapp.laba11yandroid
 
 import android.os.Bundle
 import android.widget.Toast

@@ -1,4 +1,4 @@
-package br.com.julianolopes.laba11yandroid
+package br.com.experimentalapp.laba11yandroid
 
 import org.junit.Test
 

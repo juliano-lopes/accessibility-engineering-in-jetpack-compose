@@ -1,4 +1,4 @@
-package br.com.julianolopes.laba11yandroid.ui.theme
+package br.com.experimentalapp.laba11yandroid.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
