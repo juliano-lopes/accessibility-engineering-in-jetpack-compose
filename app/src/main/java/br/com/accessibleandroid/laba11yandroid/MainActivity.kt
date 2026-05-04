@@ -178,14 +178,14 @@ fun BarrierRole() {
                     onValueChange = { estaAtivo = it }
                 )
                 .semantics {
-                    stateDescription = if (estaAtivo) "Favorite item" else "Unfavorite item"
+                    stateDescription = if (estaAtivo) "Item favorited" else "Item not favorited"
                 }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = if (estaAtivo) "Unfavorite" else "Favorite"
+                text = if (estaAtivo) "Unfavorite item" else "Favorite item"
             )
             Spacer(Modifier.weight(1f))
             Icon(
@@ -210,14 +210,14 @@ fun BarrierRole() {
                     role = Role.Button // the element role is defined as button
                 )
                 .semantics {
-                    stateDescription = if (estaAtivo) "Favorite item" else "Unfavorite item"
+                    stateDescription = if (estaAtivo) "Item favorited" else "Item not favorited"
                 }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = if (estaAtivo) "Unfavorite" else "Favorite"
+                text = if (estaAtivo) "Unfavorite item" else "Favorite item"
             )
             Spacer(Modifier.weight(1f))
             Icon(imageVector = iconeStatus, contentDescription = null, tint = corIcone)
@@ -280,14 +280,14 @@ fun BarrierState() {
                 )
                 .semantics {
                     // stateDescription informs TalkBack and populates the accessibility node
-                    stateDescription = if (estaAtivo) "Favorite item" else "Unfavorite item"
+                    stateDescription = if (estaAtivo) "Item favorited" else "Item not favorited"
                 }
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = if (estaAtivo) "Unfavorite" else "Favorite"
+                text = if (estaAtivo) "Unfavorite item" else "Favorite item"
             )
             Spacer(Modifier.weight(1f))
             Icon(imageVector = iconeStatus, contentDescription = null, tint = corIcone)
