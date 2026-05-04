@@ -1,5 +1,10 @@
 @file:Suppress("SpellCheckingInspection")
 
+/**
+ * experimental application - Accessibility Engineering in Jetpack Compose: Removing Semantic Barriers in TalkBack Navigation
+ * SBES 2026 - 40th Brazilian Symposium on Software Engineering - September 8–12, 2026 - São Paulo, SP, Brazil
+ *   */
+
 package br.com.experimentalapp.laba11yandroid
 
 import android.os.Bundle
