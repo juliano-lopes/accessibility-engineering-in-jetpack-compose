@@ -15,6 +15,10 @@ Features:
 - Flow B (improved version with semantic fixes)
 - task-based interaction scenarios
 
+This folder contains the data collected during the user study.
+
+- `cleaned_data.xlsx`: consolidated dataset used for the user study in the paper
+
 ---
 
 
