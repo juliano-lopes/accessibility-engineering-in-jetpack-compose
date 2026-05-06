@@ -14,6 +14,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.unit.IntOffset
+import kotlin.math.roundToInt
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -99,7 +103,8 @@ class MainActivity : ComponentActivity() {
 private enum class AppScreen {
     Home,
     FlowA,
-    FlowB
+    FlowB,
+    FlowC
 }
 
 private data class Product(
@@ -239,25 +244,37 @@ private fun AccessibilityStudyApp() {
     when (screen) {
         AppScreen.Home -> HomeScreen(
             onOpenFlowA = { screen = AppScreen.FlowA },
-            onOpenFlowB = { screen = AppScreen.FlowB }
+            onOpenFlowB = { screen = AppScreen.FlowB },
+            onOpenFlowC = { screen = AppScreen.FlowC }
+
         )
 
         AppScreen.FlowA -> ProductFlowScreen(
             improved = false,
+            fullBarrier5 = false,
             onBack = { screen = AppScreen.Home }
         )
 
         AppScreen.FlowB -> ProductFlowScreen(
             improved = true,
+            fullBarrier5 = false,
             onBack = { screen = AppScreen.Home }
         )
+
+        AppScreen.FlowC -> ProductFlowScreen(
+            improved = false,
+            fullBarrier5 = true,
+            onBack = { screen = AppScreen.Home }
+        )
+
     }
 }
 
 @Composable
 private fun HomeScreen(
     onOpenFlowA: () -> Unit,
-    onOpenFlowB: () -> Unit
+    onOpenFlowB: () -> Unit,
+    onOpenFlowC: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -289,6 +306,12 @@ private fun HomeScreen(
                 Button(onClick = onOpenFlowB, modifier = Modifier.fillMaxWidth()) {
                     Text("Fluxo B")
                 }
+
+                Button(onClick = onOpenFlowC, modifier = Modifier.fillMaxWidth()) {
+                    Text("Fluxo C")
+                }
+
+
             }
         }
 
@@ -303,13 +326,14 @@ private fun HomeScreen(
 @Composable
 private fun ProductFlowScreen(
     improved: Boolean,
+    fullBarrier5: Boolean,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
     //val completedStates = remember { mutableStateMapOf<Int, Boolean>() }
     val completedStates = remember {
-    mutableStateMapOf<Int, MutableState<Boolean>>()
-}
+        mutableStateMapOf<Int, MutableState<Boolean>>()
+    }
 
     var showingDetail by remember { mutableStateOf(false) }
     var selectedProduct by remember { mutableStateOf(productSections.first().products.first()) }
@@ -318,8 +342,9 @@ private fun ProductFlowScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         StudyHeader(
-            title = if (improved) "Tela Fluxo B" else "Tela Fluxo A",
+            title = if (improved) "Tela Fluxo B" else if (fullBarrier5) "Tela Fluxo C" else "Tela Fluxo A",
             improved = improved,
+            fullBarrier5 = fullBarrier5,
             onBack = onBack,
             onNotifications = {
                 Toast.makeText(
@@ -340,6 +365,7 @@ private fun ProductFlowScreen(
             ProductSectionsScreen(
                 sections = productSections,
                 improved = improved,
+                fullBarrier5 = fullBarrier5,
                 focusRequesters = focusRequesters,
                 onOpenProduct = {
                     lastFocusedId = it.id
@@ -365,8 +391,8 @@ private fun ProductFlowScreen(
             )
         } else {
             val completedState = completedStates.getOrPut(selectedProduct.id) {
-    mutableStateOf(false)
-}
+                mutableStateOf(false)
+            }
             ProductDetailScreen(
                 product = selectedProduct,
                 improved = improved,
@@ -381,6 +407,7 @@ private fun ProductFlowScreen(
 private fun StudyHeader(
     title: String,
     improved: Boolean,
+    fullBarrier5: Boolean,
     onBack: () -> Unit,
     onNotifications: () -> Unit
 ) {
@@ -425,6 +452,7 @@ private fun StudyHeader(
 private fun ProductSectionsScreen(
     sections: List<ProductSection>,
     improved: Boolean,
+    fullBarrier5: Boolean,
     focusRequesters: MutableMap<Int, FocusRequester>,
     onOpenProduct: (Product) -> Unit,
     onToggleCompleted: (Int) -> Unit,
@@ -442,6 +470,7 @@ private fun ProductSectionsScreen(
             SectionBlock(
                 section = section,
                 improved = improved,
+                fullBarrier5 = fullBarrier5,
                 focusRequesters = focusRequesters,
 
                 onOpenProduct = onOpenProduct,
@@ -461,6 +490,7 @@ private fun ProductSectionsScreen(
 private fun SectionBlock(
     section: ProductSection,
     improved: Boolean,
+    fullBarrier5: Boolean,
     focusRequesters: MutableMap<Int, FocusRequester>,
 
     onOpenProduct: (Product) -> Unit,
@@ -485,6 +515,7 @@ private fun SectionBlock(
             ProductCard(
                 product = product,
                 improved = improved,
+                fullBarrier5 = fullBarrier5,
                 focusRequesters = focusRequesters,
                 onOpenProduct = { onOpenProduct(product) },
                 onBuy = { onBuy(product) },
@@ -499,6 +530,7 @@ private fun SectionBlock(
 private fun ProductCard(
     product: Product,
     improved: Boolean,
+    fullBarrier5: Boolean,
     focusRequesters: MutableMap<Int, FocusRequester>,
     onOpenProduct: () -> Unit,
     onBuy: () -> Unit,
@@ -517,6 +549,15 @@ private fun ProductCard(
         baseModifier
             .focusRequester(focusRequester)
             .focusable()
+    } else {
+        baseModifier
+    }
+
+    val clickableModifier = if (fullBarrier5) {
+        baseModifier
+            .clickable {
+                onOpenProduct()
+            }
     } else {
         baseModifier
     }
@@ -572,7 +613,6 @@ private fun ProductCard(
 
 
                 Spacer(modifier = Modifier.width(8.dp))
-
                 Icon(
                     imageVector = Icons.Default.ShoppingCart,
                     contentDescription = null,
@@ -584,31 +624,13 @@ private fun ProductCard(
                 )
 
 
-                /*
-                                Icon(
-                                    imageVector = Icons.Default.Favorite,
-                                    contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Icon(
-                                    imageVector = Icons.Default.Settings,
-                                    contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = null
-                                )
-                                    */
             }
 
             Spacer(modifier = Modifier.width(8.dp))
 
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                modifier = clickableModifier,
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -635,73 +657,168 @@ private fun ProductCard(
                         contentDescription = null
                     )
                 }
+
+
             }
 
         } else {
             // Fluxo A: apenas o agrupamento nome + ícone Comprar fica junto;
             // o restante permanece solto, com ações separadas.
-            Row(
-                focusModifier
-                    .semantics(mergeDescendants = true) {},
-                verticalAlignment = Alignment.CenterVertically
+            var offsetX by remember { mutableStateOf(0f) }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Red)
             ) {
-
-                Text(
-                    text = product.name,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = product.price,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
                 Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = "Comprar",
-                    modifier = Modifier.pointerInput(product.id) {
-                        detectTapGestures {
-                            onBuy()
-                        }
-                    }
+                    Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(16.dp)
                 )
 
 
+                Row(
+                    modifier = focusModifier
+                        .offset {
+                            IntOffset(offsetX.roundToInt(), 0)
+                        }
+                        .background(Color.White)
+                        // DRAG GESTURE (Accessibility Barrier 1)
+                        .pointerInput(Unit) {
+                            detectHorizontalDragGestures(
+                                onDragEnd = {
+                                    if (offsetX < -300f) {
+                                        Toast.makeText(
+                                            context,
+                                            "Excluído " + product.name,
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                    }
+                                    offsetX = 0f
+                                },
+                                onHorizontalDrag = { change, dragAmount ->
+                                    change.consume()
+                                    offsetX += dragAmount
+                                }
+                            )
+                        }
+
+                        .semantics(mergeDescendants = true) {},
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = product.name,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = product.price,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+                    if (!fullBarrier5) {
+                        Icon(
+                            imageVector = Icons.Default.ShoppingCart,
+                            contentDescription = "Comprar",
+                            modifier = Modifier.pointerInput(product.id) {
+                                detectTapGestures {
+                                    onBuy()
+                                }
+                            }
+                        )
+                    }
+
+
+                }
             }
+
 
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                modifier = clickableModifier,
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = onOpenProduct) {
+                if (fullBarrier5) {
                     Icon(
                         imageVector = Icons.Default.Info,
-                        contentDescription = null
+                        contentDescription = "Ver detalhes",
+                        modifier = Modifier.pointerInput(product.id) {
+                            detectTapGestures {
+                                onOpenProduct()
+                            }
+                        }
                     )
-                }
 
 
-                IconButton(onClick = onConfigure) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "Comprar produto",
+                        modifier = Modifier.pointerInput(product.id) {
+                            detectTapGestures {
+                                onBuy()
+                            }
+                        }
+                    )
+
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = "Configurar"
+                        contentDescription = "Configurar produto",
+                        modifier = Modifier.pointerInput(product.id) {
+                            detectTapGestures {
+                                onConfigure()
+                            }
+                        }
                     )
-                }
 
-                IconButton(onClick = onDelete) {
+
+
+
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = null
+                        contentDescription = "Excluir produto",
+                        modifier = Modifier.pointerInput(product.id) {
+                            detectTapGestures {
+                                onDelete()
+                            }
+                        }
                     )
+
+
+                } else {
+
+                    IconButton(onClick = onOpenProduct) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = null
+                        )
+                    }
+
+
+                    IconButton(onClick = onConfigure) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Configurar"
+                        )
+                    }
+
+                    IconButton(onClick = onDelete) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null
+                        )
+                    }
                 }
+
             }
 
         }
@@ -723,8 +840,8 @@ private fun ProductDetailScreen(
             focusRequester.requestFocus()
         }
     }
-        var completed by remember { mutableStateOf(false) }
-        completed = completedState.value
+    var completed by remember { mutableStateOf(false) }
+    completed = completedState.value
 
     Column(
         modifier = Modifier
@@ -771,9 +888,9 @@ private fun ProductDetailScreen(
                         .toggleable(
                             value = completedState.value,
                             onValueChange = {
-                                 completedState.value = it
-                                 completed = !completed
-                                 },
+                                completedState.value = it
+                                completed = !completed
+                            },
                             role = Button
                         )
                         .semantics {
@@ -788,9 +905,10 @@ private fun ProductDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if(completed) "Desfavoritar" else "Favoritar",
-                        modifier = Modifier.weight(1f)
-                        .clearAndSetSemantics {}
+                        text = if (completed) "Desfavoritar" else "Favoritar",
+                        modifier = Modifier
+                            .weight(1f)
+                            .clearAndSetSemantics {}
 
                     )
                     Icon(
