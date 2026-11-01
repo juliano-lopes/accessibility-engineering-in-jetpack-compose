@@ -1,73 +1,68 @@
-# Accessibility Engineering in Jetpack Compose: RemovingSemantic Barriers in TalkBack Navigation
+# Accessibility Engineering in Jetpack Compose: Removing Semantic Barriers in TalkBack Navigation
 
-This repository contains the artifacts used in the paper:
-"Accessibility Engineering in Jetpack Compose: RemovingSemantic Barriers in TalkBack Navigation"
+Este repositório contém os artefatos técnicos, protótipos e experimentos desenvolvidos para o artigo e Trabalho de Conclusão de Curso (TCC) na Pós-graduação em Desenvolvimento de Aplicações Web e Mobile (**IF Sudeste MG**):
 
-## 📦 Repository Structure
+> **"Accessibility Engineering in Jetpack Compose: Removing Semantic Barriers in TalkBack Navigation"**  
+> Autor: **Juliano Lopes**
 
-This repository is organized into two branches:
-
-### 🔹 This branch - main (Prototype)
-[The main branch](https://anonymous.4open.science/r/accessibility-engineering-in-jetpack-compose/) contains the controlled prototype used for:
-- technical inspection
-- barrier identification
-- semantics tree analysis
-
-Implements:
-- flawed and corrected UI components
-- examples of the five accessibility barrier categories
+O estudo investiga como aplicar princípios de Engenharia de Software e Acessibilidade Digital no framework moderno **Jetpack Compose** (Android), identificando, catalogando e corrigindo barreiras na árvore semântica que prejudicam a navegação por gestos de usuários do leitor de telas **TalkBack**.
 
 ---
 
-### 🔹 experimental_app (User Study Application)
-[The experimental_app branch](https://anonymous.4open.science/r/accessibility-engineering-in-jetpack-compose-experimentalapp) contains the application used in the empirical evaluation with users.
+## 📦 Estrutura do Repositório
 
-Features:
-- Flow A (baseline with accessibility barriers)
-- Flow B (improved version with semantic fixes)
-- task-based interaction scenarios
+O projeto está organizado em duas branches principais para apoiar a reprodutibilidade dos experimentos:
+
+### 🔹 Branch `main` (Protótipo de Inspeção Técnica)
+Contém o protótipo controlado utilizado para:
+- Inspeção técnica da árvore semântica do Android;
+- Identificação sistemática de barreiras de acessibilidade;
+- Implementação comparativa de componentes com falhas e suas respectivas correções semânticas;
+- Testes instrumentados automatizados (`A11yTreeLogTest.kt`) para validação da acessibilidade.
+
+### 🔹 Branch `experimental_app` (Aplicação de Estudo com Usuários)
+Contém a aplicação construída para avaliação empírica de usabilidade e acessibilidade com usuários reais:
+- **Fluxo A:** Baseline da aplicação contendo as barreiras de acessibilidade identificadas;
+- **Fluxo B:** Versão aprimorada com as devidas correções semânticas aplicadas;
+- Cenários de tarefas práticas de interação orientada a leitor de telas.
 
 ---
 
-## 🧪 How to Run
+## 🧪 Como Executar o Projeto
 
-### Requirements
-- Android Studio
-- Android SDK (API 34+ recommended)
-- TalkBack enabled on device or emulator
+### Pré-requisitos
+- **Android Studio** instalado (versão recente recomendada);
+- **Android SDK** (API 34+ recomendada);
+- Dispositivo físico Android ou emulador com o **TalkBack** ativado.
 
-
-### Steps
-1. Clone the repository
-2. Checkout desired branch:
+### Passos
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/juliano-lopes/accessibility-engineering-in-jetpack-compose.git
+   cd accessibility-engineering-in-jetpack-compose
+   ```
+2. Alterne para a branch que deseja inspecionar:
    ```bash
    git checkout main
-or
-Bash
-Copiar
-git checkout experimental_app
-3. 
-Open in Android Studio
-4. 
-Build and run on a device/emulator
- 
-♿ Accessibility Evaluation
-The experimental application was designed based on five categories of accessibility barriers:
-1. 
-Labeling
-2. 
-State feedback
-3. 
-Role definition
-4. 
-Semantic grouping
-5. 
-Gesture-based interaction and discoverability of controls grouping
-Flow A intentionally includes these barriers, while Flow B implements semantic improvements.
- 
-⚠️ Notes
-* Behavior may vary depending on TalkBack version and device
-* Especially for Barrier 5 (gesture-based interaction), interaction results may differ across configurations.
- 
-📄 License
-This project is licensed under the MIT License.
+   # ou para a aplicação experimental:
+   git checkout experimental_app
+   ```
+3. Abra a pasta do projeto no **Android Studio**;
+4. Aguarde o download das dependências e a sincronização do **Gradle**;
+5. Execute a aplicação no dispositivo de testes ou emulador.
+
+---
+
+## ♿ Avaliação de Acessibilidade
+
+Os componentes e fluxos foram projetados com foco rigoroso em:
+- Anúncio fidedigno de estados, ações e nomes acessíveis;
+- Agrupamento semântico adequado de elementos interativos;
+- Eliminação de nós redundantes ou invisíveis na hierarquia do TalkBack;
+- Total conformidade com as diretrizes da **WCAG (Web Content Accessibility Guidelines)** adaptadas para o ecossistema Android nativo.
+
+---
+
+## Autor
+
+Desenvolvido por **[Juliano Lopes](https://julianolopes.com.br)** — Especialista em Acessibilidade Digital (**IAAP WAS** | **NVDA Certified Expert**).
